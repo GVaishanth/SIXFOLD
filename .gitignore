@@ -1,0 +1,21 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+coverage
+*.tsbuildinfo
+.env
+.env.local
+
+# Audit artefacts written by tools/e2e.mjs. These two lines are the whole reason
+# a blanket `*.png` rule ever existed here, and the blanket rule was the bug: it
+# also matched public/icons/*.png (named by manifest.webmanifest, linked by
+# index.html) and assets/brain-source.png (the art `npm run derive:brain` reads),
+# so a fresh clone shipped a page whose icons 404 and whose PWA install had none.
+# Ignore the artefacts by name; never ignore an image type the app ships.
+*.audit.png
+e2e-final.png
+
+node_modules/.vite

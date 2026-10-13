@@ -1,0 +1,53 @@
+{
+  "name": "sixfold",
+  "private": true,
+  "version": "1.0.0",
+  "description": "SIXFOLD: Elemental Ascension - a top-down 2D pixel-action roguelite built with React, TypeScript, Phaser 3 and Zustand.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "icons": "node scripts/gen-icons.mjs",
+    "audit": "node tools/audit.mjs",
+    "audit:e2e": "node tools/e2e.mjs",
+    "audit:mobile": "node tools/mobile-audit.mjs",
+    "verify": "npm run typecheck && npm run audit:dungeon && npm run audit:achievements && npm run audit:counter && npm run audit:brain && npm run build",
+    "audit:pages": "node tools/pages-check.mjs",
+    "audit:fit": "node tools/page-fit.mjs",
+    "audit:config": "node tools/configKeySweep.mjs",
+    "audit:camera": "node tools/camera-clock.mjs",
+    "audit:progression": "node tools/tree-health.mjs",
+    "audit:pausemenu": "node tools/pause-loadout.mjs",
+    "audit:dungeon": "node tools/dungeon-map.mjs",
+    "audit:dungeonrun": "node tools/dungeon-run.mjs",
+    "audit:achievements": "node tools/achievements-audit.mjs",
+    "audit:counter": "node tools/counter-audit.mjs",
+    "audit:brain": "node tools/brain-audit.mjs",
+    "derive:brain": "node tools/derive-brain.mjs",
+    "derive:cortex": "node tools/derive-cortex.mjs",
+    "audit:cortex": "node tools/cortex-audit.mjs",
+    "audit:dungeoncomplete": "node tools/dungeon-complete.mjs"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "phaser": "^3.90.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "playwright": "^1.64.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3"
+  }
+}

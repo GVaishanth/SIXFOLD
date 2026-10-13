@@ -1,0 +1,69 @@
+# Deploys SIXFOLD: Elemental Ascension to GitHub Pages.
+#
+# Uses the modern Pages Actions flow (configure-pages → upload-pages-artifact →
+# deploy-pages) with the OIDC token supplied by GitHub itself. No environment
+# secrets, no gh-pages branch, no committed build output.
+#
+# The Vite `base` path is derived from the repository name so the same workflow
+# works for a project page (https://<user>.github.io/<repo>/) and, if the repo
+# is renamed to `<user>.github.io`, for a user page served from the domain root.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deployment finish, but only keep the newest queued one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck and build
+        env:
+          # Project pages are served from a sub-path, user pages from the root.
+          VITE_BASE_PATH: ${{ github.event.repository.name == format('{0}.github.io', github.repository_owner) && '/' || format('/{0}/', github.event.repository.name) }}
+        run: npm run build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
